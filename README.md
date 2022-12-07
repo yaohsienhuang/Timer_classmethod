@@ -1,18 +1,11 @@
 # Timer
-## 方式一 class timer 
+## 1. 方式一 class timer 
 便於觀察程式碼各行的執行時間。
 * 開始計時(starts timer)：timer.start()
 * 建立斷點(break point)：timer.bp()
 * 結束計時(ends timer)：timer.end()s
 
-## 方式二 decorator
-* 使用裝飾器實作，觀查程序運行時間
-
-## Remark 
-* 實作中以 time.time() 獲取時間，因此其中包含 sleep。
-* 若不需要計算到sleep，可替換成 time.perf_counter 或者 time.process_time。
-
-## 使用方式一：
+### 使用方式：
 ```python=
     def dummyLoop(t):
         nb_iter = 13
@@ -27,7 +20,7 @@
     dummyLoop(0.08)
     timer.end()
 ```
-## Outputs:
+### Outputs:
 ```
 +-------+---------------------+-----------------+
 |   bp  |     record_time     | process_time(s) |
@@ -40,7 +33,11 @@
 +-------+---------------------+-----------------+
 ```
 
-## 使用方式二：裝飾器
+
+## 2. 方式二 decorator
+* 使用裝飾器實作，觀查程序運行時間
+
+### 使用方式二：裝飾器
 ```
 @timer_deco
 def dummyLoop(t):
@@ -50,9 +47,13 @@ def dummyLoop(t):
 
 dummyLoop(0.5)
 ```
-## Outputs:
+### Outputs:
 ```
 開始時間: 2022-12-07 08:58:26
 結束時間: 2022-12-07 08:58:33
 花費時間: 6.5531 s
 ```
+
+## 3. Remark 
+* 實作中以 time.time() 獲取時間，因此其中包含 sleep。
+* 若不需要計算到sleep，可替換成 time.perf_counter 或者 time.process_time。

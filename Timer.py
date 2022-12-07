@@ -31,8 +31,20 @@ class timer():
         print(my_table)
         cls.timer=[]
 
+def timer_deco(func):
+    def inner(*args,**kwargs):
+        t1=time.time()
+        print(f'開始時間: {time.strftime("%Y-%m-%d %H:%M:%S",time.gmtime(t1))}')
+        result=func(*args,**kwargs)
+        t2=time.time()
+        print(f'結束時間: {time.strftime("%Y-%m-%d %H:%M:%S",time.gmtime(t2))}')
+        print(f'花費時間: {round(t2-t1,4)} s')
+        return result
+    return inner
+
 if __name__ == '__main__':
 
+    #使用方法一
     def dummyLoop(t):
         nb_iter = 13
         for i in range(nb_iter):
@@ -45,3 +57,12 @@ if __name__ == '__main__':
     timer.bp()
     dummyLoop(0.08)
     timer.end()
+    
+    #使用方法二
+    @timer_deco
+    def dummyLoop(t):
+        nb_iter = 13
+        for i in range(nb_iter):
+            time.sleep(t)
+            
+    dummyLoop(0.5)

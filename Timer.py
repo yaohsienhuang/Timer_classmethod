@@ -42,6 +42,36 @@ def timer_deco(func):
         return result
     return inner
 
+class call_timer:
+    def __init__(self,func):
+        self.func=func
+        
+    def __call__(self,*args,**kwargs):
+        t1=time.time()
+        print(f'開始時間: {time.strftime("%Y-%m-%d %H:%M:%S",time.gmtime(t1))}')
+        result=self.func(*args,**kwargs)
+        t2=time.time()
+        print(f'結束時間: {time.strftime("%Y-%m-%d %H:%M:%S",time.gmtime(t2))}')
+        print(f'花費時間: {round(t2-t1,4)} s')
+        return result
+
+
+class timer_context:
+    def __init__(self):
+        self.elapsed=0
+        
+    def __enter__(self):
+        self.t1=time.time()
+        print(f'開始時間: {time.strftime("%Y-%m-%d %H:%M:%S",time.gmtime(self.t1))}')
+        return self
+        
+    def __exit__(self,exc_type,exc_val,exc_tb):
+        self.t2=time.time()
+        self.elapsed=round(self.t2-self.t1,4)
+        print(f'結束時間: {time.strftime("%Y-%m-%d %H:%M:%S",time.gmtime(self.t2))}')
+        print(f'花費時間: {round(self.elapsed,4)} s')
+        return False
+
 if __name__ == '__main__':
 
     #使用方法一
@@ -53,16 +83,29 @@ if __name__ == '__main__':
     timer.start()
     dummyLoop(0.01)
     timer.bp()
-    dummyLoop(0.5)
+    dummyLoop(0.05)
     timer.bp()
     dummyLoop(0.08)
     timer.end()
     
     #使用方法二
     @timer_deco
-    def dummyLoop(t):
+    def dummyLoop2(t):
         nb_iter = 13
         for i in range(nb_iter):
             time.sleep(t)
-            
-    dummyLoop(0.5)
+    
+    dummyLoop2(0.5)
+    
+    # 使用方式三
+    @call_timer
+    def dummyLoop3(t):
+        nb_iter = 13
+        for i in range(nb_iter):
+            time.sleep(t)
+        
+    dummyLoop3(0.5)
+    
+    # 使用方式四
+    with timer_context() as timer:
+        dummyLoop(0.5)
